@@ -1,7 +1,7 @@
-all: linux windows
+all: linux
 
 linux : 
 	@echo "Compile for Linux"
-	@gcc plateau.c -o code.out
+	@gcc main.c -o main.out
 	@echo "Done"
-	@./code.out
+	@./main.out
