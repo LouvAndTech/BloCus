@@ -1,11 +1,7 @@
-all: linux windows
+all: linux
 
 linux : 
 	@echo "Compile for Linux"
-	@gcc CodeSource.c -o code.out
+	@gcc main.c -o main.out
 	@echo "Done"
-
-windows :
-	@echo "Compile for windows"
-	@x86_64-w64-mingw32-gcc CodeSource.c -o Game.exe
-	@echo "Done"
+	@./main.out
