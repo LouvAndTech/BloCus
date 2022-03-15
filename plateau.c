@@ -1,25 +1,30 @@
 #include <stdio.h>
 
-#define SIZE 22
 
-
-int main(){
-    int plateau[SIZE][SIZE];
-    for(int i=0; i<SIZE; i++){
-        for(int j=0; j<SIZE; j++){
-            if((i==0) || (i==SIZE-1) || (j==0) || (j==SIZE-1)){
-                plateau[i][j]=5;
+/**
+ * @brief plateau
+ * 
+ * @param int* 
+ * @param int 
+ * @return
+ */
+int plateau(int tab[22][22], int size){
+    for(int i=0; i<size; i++){
+        for(int j=0; j<size; j++){
+            if((i==0) || (i==21) || (j==0) || (j==21)){
+                tab[i][j]=5;
             }
             else{
-                plateau[i][j]=0;
+                tab[i][j]=0;
             }
         }
     }
-    for(int i=0; i<SIZE; i++){
-        for(int j=0; j<SIZE; j++){
-            printf("%d ",plateau[i][j]);
+    int c=1;
+    for(int k=0; k<22; k+=21){
+        for(int l=0; l<22; l+=21){
+            tab[k][l]=c;
+            c++;
         }
-        printf("\n");
     }
     return 0;
 }
