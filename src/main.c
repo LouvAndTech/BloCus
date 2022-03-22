@@ -91,11 +91,13 @@ int main(int argc, char const *argv[])
                     printf("C'est au joueur %d de jouer !",player);
                     getchar();
                     state = 1;
+                    break;
                 //piece selection 
                 case 1:
                     printf("Choisi une piece a jouer");
                     //WIP :
                         //selection = good ==> state = 2
+                    break;
 
                 //select an orientation 
                 case 2:
@@ -103,6 +105,7 @@ int main(int argc, char const *argv[])
                     //WIP 
                         //validate orientation ==> state = 3
                         // want to change piece ==> state 1
+                    break;
 
                 //Select a place to place the piece 
                 case 3:
@@ -110,20 +113,22 @@ int main(int argc, char const *argv[])
                     //WIP 
                         //place = good ==> state = 4
                         // want to change orientation ==> state 2
+                    break;
 
                 //updateing the piece in his inventory 
                 case 4:
+                    printf("WIP");
                     //WIP 
                         //removing the choosen piece from the remaining ones 
                         //if the remaining piece = 1 check if it's the square, if it is add the bonus 
-
+                    break;
                 }
             }
         }
         //Check for each player if they are able to play 
         //----WIP----
         //Switch to the next player
-        player = (player==4)? 1 : player++;
+        player = (player==4)? 1 : player+1;
     }
     
     return 0;

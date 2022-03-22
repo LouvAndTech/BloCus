@@ -9,6 +9,8 @@
  * 
  */
 
+#include"test_pos.h"
+
 #define SIZE_BOARD 22
 #define SIZE_PIECE 7
 
@@ -41,6 +43,6 @@ int checkPos(int board[SIZE_BOARD][SIZE_BOARD], int piece[SIZE_PIECE][SIZE_PIECE
             }
         }
     }
-    return(closeEnougth ? 1 : 0 );
+    return(closeEnougth);
 }
 
