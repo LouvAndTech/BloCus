@@ -1,7 +1,7 @@
-all: linux
+all: GCC
 
 linux : 
 	@echo "Compile for Linux"
-	@gcc ./src/main.c -o main.out
+	@gcc -o main.out ./src/main.c
 	@echo "Done"
 	@./main.out

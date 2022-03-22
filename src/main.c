@@ -5,7 +5,7 @@
  * @version 0.1
  * @date 2022-03-15
  * 
- * @copyright Copyright (c) 2022
+ * @copyright Copyright (C) 2007 Free Software Foundation
  * 
  */
 
@@ -14,6 +14,7 @@
 
 //Other files
 #include "plateau.c"
+#include "piece.c"
 
 //constant
 #define SIZE_PLAT 22
@@ -92,16 +93,29 @@ int main(int argc, char const *argv[])
                     getchar();
                     state = 1;
                     break;
+
                 //piece selection 
                 case 1:
-                    printf("Choisi une piece a jouer");
-                    //WIP :
-                        //selection = good ==> state = 2
+                    //ask the player to choose a piece
+                    printf("Choisi une piece a jouer (0-20): ");
+                    int pieceChoose;
+                    scanf("%d",&pieceChoose);
+                    int pieceActuel[7][7];
+                    returnPiece(pieceActuel,pieceChoose); 
+                    //Print for debug
+                    printf("\n");
+                    for (int i = 0; i < 7; i++){
+                        for (int j = 0; j < 7; j++){
+                            printf("%d",pieceActuel[i][j]);
+                        }
+                        printf("\n");
+                    }
+                    getchar();
                     break;
 
                 //select an orientation 
                 case 2:
-                    printf("Choisi un endroit ou mettre la pièce.");
+                    printf("Choisi une orientation.");
                     //WIP 
                         //validate orientation ==> state = 3
                         // want to change piece ==> state 1
