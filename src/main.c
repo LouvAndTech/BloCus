@@ -15,6 +15,7 @@
 //Other files
 #include "plateau.c"
 #include "piece.c"
+#include "orientation.c"
 
 //constant
 #define SIZE_PLAT 22
@@ -36,6 +37,17 @@ typedef struct {
 
 }Player;
 
+void printPiece(int piece[7][7]){
+    printf("\n");
+    for (int i = 0; i < 7; i++){
+        for (int j = 0; j < 7; j++){
+            printf("%d ",piece[i][j]);
+        }
+        printf("\n");
+    }
+    getchar();
+}
+
 /**
  * @brief init a player
  * 
@@ -47,7 +59,7 @@ Player initPlayer(){
     p.bonus=0;
     p.up=1;
     for (int i = 0; i < NUMBER_PIECES; i++){
-        p.remaingin[i]=i;
+        p.remaingin[i]=1;
     }
     return p;
 }
@@ -76,14 +88,16 @@ int main(int argc, char const *argv[])
 
     //Initializing a variable to store if the game is running or dead
     int game_running = 1;
-    //Initialise a list to store each player continue or loos state in the game 
+    //List to store each player state in the game 
     Player playerL[4] = {initPlayer(),initPlayer(),initPlayer(),initPlayer()};
     //start with the player 1:
-    int player = 1;
+    int player = 0;
     //While the game is not win yet
     while (game_running){
+        //if the player isn't dead yet
         if (playerL[player].up){
-            int state = 0;
+            int state = 0; //Store the state in the tour
+            int pieceActuel[7][7]; //Store the piece in it's actual state
             while (state != 5){
                 switch (state)
                 {
@@ -96,29 +110,76 @@ int main(int argc, char const *argv[])
 
                 //piece selection 
                 case 1:
-                    //ask the player to choose a piece
-                    printf("Choisi une piece a jouer (0-20): ");
+                    printf("Selection de la piece\n");
+                    //Store the choosen piece
                     int pieceChoose;
-                    scanf("%d",&pieceChoose);
-                    int pieceActuel[7][7];
+                    do{
+                        printf("Choisi une piece a jouer (0-20): ");
+                        //get the value
+                        scanf("%d",&pieceChoose);
+                        //Check if the player still got the piece in inventory
+                    }while (playerL[player].remaingin[pieceChoose]==0 || pieceChoose>20 || pieceChoose<0);
+                    //Get the piece from the database
                     returnPiece(pieceActuel,pieceChoose); 
+                    
                     //Print for debug
-                    printf("\n");
-                    for (int i = 0; i < 7; i++){
-                        for (int j = 0; j < 7; j++){
-                            printf("%d",pieceActuel[i][j]);
-                        }
-                        printf("\n");
-                    }
-                    getchar();
+                    printPiece(pieceActuel);
+
+                    //Switch to the next step
+                    state = 2;
                     break;
 
                 //select an orientation 
                 case 2:
-                    printf("Choisi une orientation.");
-                    //WIP 
-                        //validate orientation ==> state = 3
-                        // want to change piece ==> state 1
+                    printf("Choisir une orientation.");
+                    //Store the choice
+                    int choice = 0;
+                    int changedPiece[7][7]; //Piece to store the change 
+                    initZero(changedPiece);
+                    do{
+                        switch(choice){
+                            //Ask while the answer isn't correct
+                            case 0:
+                                do{
+                                    printf("\n1 - miroir\n2 - droite\n3 - gauche\n4 - valider\n5 - retour\n-> ");
+                                    scanf("%d",&choice);
+                                    printf("\n");
+                                }while(choice<1 || choice>5);
+                                break;
+                            case 1:
+                                //miror pieceActuel and store it into changedPiece
+                                miror(pieceActuel,changedPiece);
+                                //Them copy changed piece into Pieceactuel
+                                copy(changedPiece,pieceActuel);
+                                //Print for debug
+                                printPiece(pieceActuel);
+
+                                choice = 0;
+                                break;
+                            case 2:
+                                //Rotate right
+                                rotateRigth(pieceActuel,changedPiece);
+                                //copy to the actual piece
+                                copy(changedPiece,pieceActuel);
+                                //Print for debug
+                                printPiece(pieceActuel);
+                                choice = 0;
+                                break;
+                            case 3:
+                                //rotateLeft
+                                rotateLeft(pieceActuel,changedPiece);
+                                copy(changedPiece,pieceActuel);
+                                printPiece(pieceActuel);
+                                choice = 0;
+                                break;
+                            case 4:
+                                state = 3;
+                                break;
+                            case 5:
+                                state = 1;
+                                break;
+                        }                        
+                    }while(state == 2);
                     break;
 
                 //Select a place to place the piece 
