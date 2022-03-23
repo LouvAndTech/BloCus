@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 /**
  * @brief Initializing an array at 0
  * 
@@ -25,6 +23,24 @@ int jmax(int array[7][7]){
         for (int j = 0; j < 7; j++){
             if (array[i][j]!=0 && j>max){
                 max = j;
+            }
+        }
+    }
+    return(max);
+}
+
+/**
+ * @brief Get the max value on the i side
+ * 
+ * @param array A piece array
+ * @return int  the index of the max
+ */
+int imax(int array[7][7]){
+    int max = 0;
+    for (int i = 0; i < 7; i++){
+        for (int j = 0; j < 7; j++){
+            if (array[i][j]!=0 && i>max){
+                max = i;
             }
         }
     }
@@ -60,14 +76,36 @@ void copy(int origin[7][7],int new[7][7]){
     }
 }
 
+/**
+ * @brief Rotate a piece to the right 
+ * 
+ * @param origin    Inout
+ * @param new       Output
+ */
 void rotateRigth(int origin[7][7],int new[7][7]){
+    int iMax = imax(origin);
+    int jMax = jmax(origin);
     for (int i = 0; i < 7; i++){
         for (int j = 0; j < 7; j++){
-            new[i][j] = origin[jmax(origin)-j][i];
+            if (iMax == jMax){
+                new[i][j] = origin[imax(origin)-j][i];
+            }else {
+                if(iMax>=j && jMax >=i){
+                new[i][j] = origin[iMax-j][jMax-i];
+                }else{
+                    new[i][j] = 0;
+                }
+            }
         }
     }
 }
 
+/**
+ * @brief Rotate a piece to the left 
+ * 
+ * @param origin    Input
+ * @param new       Output
+ */
 void rotateLeft(int origin[7][7],int new[7][7]){
     for (int rot = 0; rot < 3 ; rot++){
         rotateRigth(origin,new);
