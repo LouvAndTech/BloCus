@@ -1,4 +1,15 @@
 /**
+ * @file orientation.c
+ * @author Elouan Lérissel
+ * @brief function to handle orientation of the pieces
+ * @version 0.1
+ * @date 2022-03-23
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
+/**
  * @brief Initializing an array at 0
  * 
  * @param array A piece array
