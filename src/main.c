@@ -16,7 +16,7 @@
 #include "plateau.c"
 #include "piece.c"
 #include "orientation.c"
-#include "boardXpiece.h"
+#include "boardXpiece.c"
 
 //constant
 #define SIZE_PLAT 22
@@ -34,7 +34,7 @@
      */
     typedef struct {
         int score;
-        int remaingin[NUMBER_PIECES];
+        int inventory[NUMBER_PIECES];
         int bonus;
         int up;
 
@@ -52,12 +52,17 @@
         p.bonus=0;
         p.up=1;
         for (int i = 0; i < NUMBER_PIECES; i++){
-            p.remaingin[i]=1;
+            p.inventory[i]=1;
         }
         return p;
     }
 //END CLASS
 
+/**
+ * @brief  function to print a piece
+ * 
+ * @param piece //the piece to print
+ */
 void printPiece(int piece[7][7]){
     printf("\n");
     for (int i = 0; i < 7; i++){
@@ -75,11 +80,13 @@ void printPiece(int piece[7][7]){
  * @param tab the board to print
  */
 void printTheBoard(int tab[SIZE_PLAT][SIZE_PLAT]){
+    printf("\n     0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21\n# --------------------------------------------------------------------\n");
     for (int i = 0; i < SIZE_PLAT; i++){
+        printf(i>9?"%d | ":" %d | ",i);
         for (int j = 0; j < SIZE_PLAT; j++){
-            printf("%d ",tab[i][j]);
+            printf("%d  ",tab[i][j]);
         }
-        printf("\n");
+        printf("\n   |\n");
     }
 }
 
@@ -97,13 +104,6 @@ int main(int argc, char const *argv[])
     int tab[SIZE_PLAT][SIZE_PLAT];
     //initializing the Array with the a game start
     plateau(tab,SIZE_PLAT);
-    //Printing the board
-    for(int i=0; i<SIZE_PLAT; i++){
-        for(int j=0; j<SIZE_PLAT; j++){
-            printf("%d ",tab[i][j]);
-        }
-        printf("\n");
-    }
 
     //Initializing a variable to store if the game is running or dead
     int game_running = 1;
@@ -116,13 +116,14 @@ int main(int argc, char const *argv[])
         //if the player isn't dead yet
         if (playerL[player].up){
             int state = 0; //Store the state in the tour
+            int pieceChoose;    //Store the piece choosen by the player
             int pieceActuel[7][7]; //Store the piece in it's actual state
             while (state != 5){
                 switch (state)
                 {
                 //Tell the player it's they turn
                 case 0:
-                    printf("C'est au joueur %d de jouer !",player);
+                    printf("C'est au joueur %d de jouer !",player+1);
                     getchar();
                     printTheBoard(tab);
                     state = 1;
@@ -131,14 +132,12 @@ int main(int argc, char const *argv[])
                 //piece selection 
                 case 1:
                     printf("Selection de la piece\n");
-                    //Store the choosen piece
-                    int pieceChoose;
                     do{
                         printf("Choisi une piece a jouer (0-20): ");
                         //get the value
                         scanf("%d",&pieceChoose);
                         //Check if the player still got the piece in inventory
-                    }while (playerL[player].remaingin[pieceChoose]==0 || pieceChoose>20 || pieceChoose<0);
+                    }while (playerL[player].inventory[pieceChoose]==0 || pieceChoose>20 || pieceChoose<0);
                     //Get the piece from the database
                     returnPiece(pieceActuel,pieceChoose); 
                     
@@ -240,7 +239,7 @@ int main(int argc, char const *argv[])
 
                             case 2:
                                 //Check if the place is free
-                                if(checkPos(tab,pieceActuel,pos,player)){
+                                if(checkPos(tab,pieceActuel,pos,player+1)){
                                     placePiece(tab,pieceActuel,pos,player);
                                     //Switch to the next step
                                     state = 4;
@@ -253,27 +252,48 @@ int main(int argc, char const *argv[])
                     }while(state ==3);
                     break;
 
-                //updateing the piece in his inventory 
+                //update the player inventory and pass to the next
                 case 4:
-                    printf("WIP");
-                    /*
-                    //Check if the player win
-                    if(checkWin(tab,playerL[player].score)){
+                    //Update the inventory
+                    playerL[player].inventory[pieceChoose]=0;
+
+                    //Check if the player is winner
+                    if(checkWin(playerL[player].inventory)){
                         printf("\nLe joueur %d a gagné !\n",player);
+                        //If they win leave the game 
                         game_running = 0;
-                    }*/
-                    //WIP 
-                        //removing the choosen piece from the remaining ones 
-                        //if the remaining piece = 1 check if it's the square, if it is add the bonus 
+                    }else{
+                        //check state of each player
+                        int playerout = 0;
+                        for (int i= 0; i < 4; i++){
+                            if (blocked(tab,playerL[i].inventory,player)){
+                                playerL[i].up = 0;
+                                playerout++;
+                            }
+                        }
+                        if (playerout == 4){
+                            printf("\nTous les joueurs sont bloqués !\n");
+                            state = 5;
+                        }else{
+                            //Switch to the next player
+                            player = (player+1)%4;
+                            if (!playerL[player].up){
+                                player = (player+1)%4;
+                            }
+                        }
+                    }
+                    break;
+
+                //End game
+                case 5:
+                    printf("\nFin du jeu\n");
+                    game_running = 0;
                     break;
                 }
             }
         }
-        //Check for each player if they are able to play 
-        //----WIP----
-        //Switch to the next player
-        player = (player==4)? 1 : player+1;
     }
-    
     return 0;
 }
+
+
