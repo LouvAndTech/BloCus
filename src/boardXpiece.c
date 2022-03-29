@@ -9,7 +9,7 @@
  * 
  */
 
-#include"test_pos.h"
+#include"boardXpiece.h"
 
 #define SIZE_BOARD 22
 #define SIZE_PIECE 7
@@ -46,3 +46,15 @@ int checkPos(int board[SIZE_BOARD][SIZE_BOARD], int piece[SIZE_PIECE][SIZE_PIECE
     return(closeEnougth);
 }
 
+void placePiece(int tab[SIZE_BOARD][SIZE_BOARD],int piece[7][7],int pos[2],int player){
+    //Get the real position on the board
+    int realPos[2] = {pos[0]-1, pos[1]-1};
+    //For each case in the case 
+    for (int piece_h = 0; piece_h < SIZE_PIECE; piece_h++){
+        for (int piece_v = 0; piece_v < SIZE_PIECE; piece_v++){
+            if(piece[piece_h][piece_v]==1){
+                tab[piece_h+realPos[0]][piece_v+realPos[1]]=player;
+            }
+        }
+    }
+}
