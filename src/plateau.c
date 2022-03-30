@@ -9,8 +9,6 @@
  * 
  */
 
-#include <stdio.h>
-
 //Include header
 #include "plateau.h"
 
