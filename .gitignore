@@ -56,3 +56,4 @@ dkms.conf
 
 #MakeFile
 makefile
+.vscode/settings.json
