@@ -22,10 +22,10 @@ typedef struct{
     int board[22][22]; //The actual state of the board
 }data;
 
-void savegame(int board[22][22],int player,int playerlist[4]){
-    // donne = formatData();
-    // addRow(donne);
-}
+// void savegame(int board[22][22],int player,int playerlist[4]){
+//     // donne = formatData();
+//     // addRow(donne);
+// }
 
 void creatTable(){
     sqlite3 *db;
@@ -33,7 +33,10 @@ void creatTable(){
     int rc;
     char *sql;
 
-    sql="CREATE TABLE Save(id INT,player_turn INT,piece_restante[4][21] INT,board[22][22] INT);";
+    rc = sqlite3_open("./file.db",&db);
+
+
+    sql="CREATE TABLE Save(id INT,player_turn INT, piece_restante INT ,board INT);";
 
     //Execute sql statements
     rc=sqlite3_exec(db, sql, 0, 0, &zErrMsg);
@@ -43,21 +46,43 @@ void creatTable(){
         sqlite3_free(zErrMsg);
     }
     else{
-        fprintf(stdout,"Table created sucessfully\n");
+        fprintf(stdout,">>> Table created sucessfully\n");
     }
 }
 
-data formatData(int board[22][22], int player, data PlayerL){
-    data donnees;
+void deleteTable(){
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+    char *sql;
 
-    donnees.board[22][22] = board;
-    donnees.player_turn = player;
-    donnees.piece_restante[4][22] = ;
+    rc = sqlite3_open("./file.db",&db);
 
-    return donnees;
+    sql="DROP TABLE Save;";
+
+    //Execute sql statements
+    rc=sqlite3_exec(db, sql, 0, 0, &zErrMsg);
+
+    if(rc != SQLITE_OK){
+        fprintf(stderr,"SQL error: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    else{
+        fprintf(stdout,">>> Table deleted sucessfully\n");
+    }
 }
 
-void addRow(donnees){
+// data formatData(int board[22][22], int player, data PlayerL){
+//     data donnees;
+//
+//     donnees.board[22][22] = board;
+//     donnees.player_turn = player;
+//     donnees.piece_restante[4][22] = ;
+//
+//     return donnees;
+// }
+
+void addRow(int player, int id){
     sqlite3 *db;
     char *zErrMsg = 0;
     int rc;
@@ -67,15 +92,10 @@ void addRow(donnees){
     rc = sqlite3_open("./file.db",&db);
 
     if(rc){
-        fprintf(stderr, "Can't open database!: %s\n", sqlite3_errmsg(db));
-        return 0;
+        fprintf(stderr, ">>> Can't open database!: %s\n", sqlite3_errmsg(db));
     }
-    else{
-        fprintf(stdout," Opened database sucessfully\n");
-    }
-
     //add data a new row
-    sql="INSERT INTO Save (id, player_turn) VALUES (1,17)";
+    sql="INSERT INTO Save (id INT, player_turn INT) VALUES (%d,%d)",id,player;
 
     rc=sqlite3_exec(db, sql, NULL, NULL, &zErrMsg);
 
@@ -83,68 +103,15 @@ void addRow(donnees){
     sqlite3_close(db);
 }
 
-
-
-
-
-
-
 int main(int argc, char **argv){
-    sqlite3 *db;
-    char *zErrMsg = 0;
-    int rc;
-    char *sql;
+    int piece_restante[4][21];
+    int board[22][22];
+    deleteTable();
+    creatTable();
 
-    //Open database
-    rc = sqlite3_open("./file.db",&db);
+    addRow(1,50);
+    addRow(2,40);
+    addRow(3,30);
 
-    if(rc){
-        fprintf(stderr, "Can't open database!: %s\n", sqlite3_errmsg(db));
-        return 0;
-    }
-    else{
-        fprintf(stdout," Opened database sucessfully\n");
-    }
-
-    /*Create sql table
-    sql="CREATE TABLE Save(id INT,player_turn INT);";
-
-    //Execute sql statements
-    rc=sqlite3_exec(db, sql, 0, 0, &zErrMsg);
-
-    if(rc != SQLITE_OK){
-        fprintf(stderr,"SQL error: %s\n", zErrMsg);
-        sqlite3_free(zErrMsg);
-    }
-    else{
-        fprintf(stdout,"Table created sucessfully\n");
-    }
-    */
-
-    /*Write in the Database*/
-    sql="INSERT INTO Save (id, player_turn) VALUES (1,17)";
-
-    rc=sqlite3_exec(db, sql, NULL, NULL, &zErrMsg);
-
-    sqlite3_close(db);
-
-
-    //read form db
-    rc = sqlite3_open("./file.db",&db);
-    sql = "SELECT * FROM Save";
-        
-    rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
-    if (rc != SQLITE_OK ) {
-        
-        fprintf(stderr, "Failed to select data\n");
-        fprintf(stderr, "SQL error: %s\n", zErrMsg);
-
-        sqlite3_free(zErrMsg);
-        sqlite3_close(db);
-        
-        return 1;
-    }
-
-    sqlite3_close(db);
     return 0;
 }
