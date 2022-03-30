@@ -136,6 +136,9 @@ int main(int argc, char const *argv[])
                         printf("Choisi une piece a jouer (0-20): ");
                         //get the value
                         scanf("%d",&pieceChoose);
+                        if (playerL[player].inventory[pieceChoose]==0){
+                            printf("Piece non disponible\n");
+                        }
                         //Check if the player still got the piece in inventory
                     }while (playerL[player].inventory[pieceChoose]==0 || pieceChoose>20 || pieceChoose<0);
                     //Get the piece from the database
@@ -211,12 +214,13 @@ int main(int argc, char const *argv[])
                         switch (localState){
                             case 0: //enter x
                                 do{ 
+                                    pos[0] = -1;
                                     printTheBoard(tab);
                                     printf("\nEntrer une colonne(0 pour revenir): \n-> ");
                                     scanf("%d",&pos[0]);
                                     printf("\n");
-                                }while(choice<1 || choice>20);
-                                if(choice){
+                                }while(pos[0]<0 || pos[0]>20);
+                                if(pos[0]){
                                     localState = 1;
                                 }else{
                                     state = 2;
@@ -225,12 +229,13 @@ int main(int argc, char const *argv[])
 
                             case 1: //Enter y
                                 do{
+                                    pos[1] = -1;
                                     printTheBoard(tab);
                                     printf("\nEntrer une ligne (0 pour revenir): \n-> ");
                                     scanf("%d",&pos[1]);
                                     printf("\n");
-                                }while(choice<0 || choice>20);
-                                if(choice){
+                                }while(pos[1]<0 || pos[1]>20);
+                                if(pos[1]){
                                     localState = 2;
                                 }else{
                                     localState = 0;
@@ -241,6 +246,7 @@ int main(int argc, char const *argv[])
                                 //Check if the place is free
                                 if(checkPos(tab,pieceActuel,pos,player+1)){
                                     placePiece(tab,pieceActuel,pos,player);
+                                    printTheBoard(tab); 
                                     //Switch to the next step
                                     state = 4;
                                 }else{
@@ -280,6 +286,7 @@ int main(int argc, char const *argv[])
                             if (!playerL[player].up){
                                 player = (player+1)%4;
                             }
+                            state = 0;
                         }
                     }
                     break;

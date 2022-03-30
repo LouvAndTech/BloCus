@@ -26,20 +26,23 @@
  */
 int checkPos(int board[SIZE_BOARD][SIZE_BOARD], int piece[SIZE_PIECE][SIZE_PIECE],int pos[2],int player){
     //Get the real position on the board
-    int realPos[2] = {pos[0]-1, pos[1]-1};
+    int posMasquePiece[2] = {pos[0]-1, pos[1]-1};
     //Init the varaibale for close enought
     int closeEnougth = 0;
+
+    //DEBUG
+    //printf("Player : %d | Player+1 : %d\n",player,player+1);
 
     //For each case in the case 
     for (int piece_h = 0; piece_h < SIZE_PIECE; piece_h++){
         for (int piece_v = 0; piece_v < SIZE_PIECE; piece_v++){
-            if(piece[piece_h][piece_v]==1 && board[piece_h+realPos[0]][piece_v+realPos[1]]!=0){
+            if(piece[piece_h][piece_v]==1 && board[piece_h+posMasquePiece[0]][piece_v+posMasquePiece[1]]!=0){
                 return(0);
             }
-            if (piece[piece_h][piece_v]==2 && board[piece_h+realPos[0]][piece_v+realPos[1]]==player+1){
+            if (piece[piece_h][piece_v]==2 && board[piece_h+posMasquePiece[0]][piece_v+posMasquePiece[1]]==player){
                 closeEnougth=1;
             }
-            if (piece[piece_h][piece_v]==3 && board[piece_h+realPos[0]][piece_v+realPos[1]]==player+1){
+            if (piece[piece_h][piece_v]==3 && board[piece_h+posMasquePiece[0]][piece_v+posMasquePiece[1]]==player){
                 return(0);
             }
         }
@@ -112,7 +115,7 @@ int blocked(int tab[SIZE_BOARD][SIZE_BOARD],int pieces[21],int player){
                             //for each rotation of the piece
                             for (int rt = 0; rt < 3; rt++){
                                 //Check if it's possible
-                                if(checkPos(tab,tabPiece,pos,player)==1){
+                                if(checkPos(tab,tabPiece,pos,player+1)==1){
                                     return(0);
                                 }
                                 //Rotate right
