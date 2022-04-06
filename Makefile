@@ -1,7 +1,7 @@
-all: linux
+all: GCC
 
-linux : 
+GCC : 
 	@echo "Compile for Linux"
-	@gcc ./src/main.c -o main.out
+	@gcc -o save.out ./src/save.c ./src/sqlite/sqlite3.c -lpthread -ldl
 	@echo "Done"
-	@./main.out
+	@./save.out
