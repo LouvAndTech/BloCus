@@ -56,3 +56,6 @@ dkms.conf
 
 #MakeFile
 makefile
+
+#test file
+test.c
