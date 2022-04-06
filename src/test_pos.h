@@ -1,5 +1,5 @@
-#ifndef BOARDXPIECE_H_  /* Include guard */
-#define BOARDXPIECE_H_
+#ifndef TEST_POS_H_  /* Include guard */
+#define TEST_POS_H_
 
 #define SIZE_BOARD 22
 #define SIZE_PIECE 7
