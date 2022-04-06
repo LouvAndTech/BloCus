@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "piece.h"
 
 int piece[21][7][7]={
