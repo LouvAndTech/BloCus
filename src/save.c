@@ -82,11 +82,12 @@ void deleteTable(){
 //     return donnees;
 // }
 
-void addRow(int player, int id){
+void addRow(int id, int player, int piece_restante, int* board){
     sqlite3 *db;
     char *zErrMsg = 0;
     int rc;
     char *sql;
+    char boardChar[24] = "test bitch";
 
     //open db
     rc = sqlite3_open("./file.db",&db);
@@ -95,7 +96,10 @@ void addRow(int player, int id){
         fprintf(stderr, ">>> Can't open database!: %s\n", sqlite3_errmsg(db));
     }
     //add data a new row
-    sql="INSERT INTO Save (id INT, player_turn INT) VALUES (%d,%d)",id,player;
+    char buffer[1024];
+    snprintf(buffer, sizeof(buffer), "INSERT INTO Save (id,player_turn,piece_restante,board) VALUES (%d,%d,%d,%s)",id,player,piece_restante,boardChar);
+    printf("\n>>> %s <<<\n",buffer);
+    sql=buffer;
 
     rc=sqlite3_exec(db, sql, NULL, NULL, &zErrMsg);
 
@@ -109,9 +113,7 @@ int main(int argc, char **argv){
     deleteTable();
     creatTable();
 
-    addRow(1,50);
-    addRow(2,40);
-    addRow(3,30);
+    addRow(1,2,3,*board);
 
     return 0;
 }
