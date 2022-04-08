@@ -93,15 +93,12 @@ void printTheBoard(int tab[SIZE_PLAT][SIZE_PLAT]){
 
 void retrieveSave(int *turn,Player list[4],int tab[SIZE_PLAT][SIZE_PLAT]){
     int lProv[4][21];
-    printf("\n>>>Debug - 3\n");
     readSave(turn,lProv,tab);
-    printf("\n>>>Debug - 4\n");
     for (int i = 0; i < 4; i++){
         for (int j = 0; j < 21; j++){
             list[i].inventory[j] = lProv[i][j];
         }
     }
-    printf("\n>>>Debug - 5\n");
 }
 
 
@@ -128,14 +125,12 @@ int main(int argc, char const *argv[])
 
     //Ask the player to start a new game or load from the save
     int ngame = 0;
-    printf("\n>>>Debug - 1\n");
     do{
         printf("\n1 - Nouvelle partie\n2 - Charger une partie\n-> ");
         scanf("%d",&ngame);
         printf("\n");
     }while(ngame<1 || ngame>2);
     if (ngame==2){
-        printf("\n>>>Debug - 2\n");
         retrieveSave(&player,playerL,tab);
     }
 
@@ -341,7 +336,6 @@ int main(int argc, char const *argv[])
                 //Savegame
                 case 6:
                     printf("\nSauvegarde du jeu\n");
-                    printf("\n>>>Debug - 7\n");
                     int piecesL [4][21];
                     for (int i = 0; i < 4; i++){
                         for (int j = 0; j < 21; j++){
@@ -349,12 +343,13 @@ int main(int argc, char const *argv[])
                         }
                     }
                     newSave(player,piecesL,tab);
-                    printf("Gamr saved !\n");
+                    printf("Game saved !\n");
                     game_running = 0;
                     break;
                 }
             }
         }
+
         getchar();
         program_running = 0;
     }
