@@ -17,6 +17,7 @@
 #include "piece.c"
 #include "orientation.c"
 #include "boardXpiece.c"
+#include "saveFile.c"
 
 //constant
 #define SIZE_PLAT 22
@@ -90,6 +91,19 @@ void printTheBoard(int tab[SIZE_PLAT][SIZE_PLAT]){
     }
 }
 
+void retrieveSave(int *turn,Player list[4],int tab[SIZE_PLAT][SIZE_PLAT]){
+    int lProv[4][21];
+    printf("\n>>>Debug - 3\n");
+    readSave(turn,lProv,tab);
+    printf("\n>>>Debug - 4\n");
+    for (int i = 0; i < 4; i++){
+        for (int j = 0; j < 21; j++){
+            list[i].inventory[j] = lProv[i][j];
+        }
+    }
+    printf("\n>>>Debug - 5\n");
+}
+
 
 /**
  * @brief Main
@@ -105,29 +119,56 @@ int main(int argc, char const *argv[])
     //initializing the Array with the a game start
     plateau(tab,SIZE_PLAT);
 
-    //Initializing a variable to store if the game is running or dead
-    int game_running = 1;
+    //Initializing a variable to store if program is running or dead
+    int program_running = 1;
     //List to store each player state in the game 
     Player playerL[4] = {initPlayer(),initPlayer(),initPlayer(),initPlayer()};
     //start with the player 1:
     int player = 0;
-    //While the game is not win yet
-    while (game_running){
+
+    //Ask the player to start a new game or load from the save
+    int ngame = 0;
+    printf("\n>>>Debug - 1\n");
+    do{
+        printf("\n1 - Nouvelle partie\n2 - Charger une partie\n-> ");
+        scanf("%d",&ngame);
+        printf("\n");
+    }while(ngame<1 || ngame>2);
+    if (ngame==2){
+        printf("\n>>>Debug - 2\n");
+        retrieveSave(&player,playerL,tab);
+    }
+
+    //While the prog is not exit yet
+    while (program_running){
         //if the player isn't dead yet
         if (playerL[player].up){
             int state = 0; //Store the state in the tour
             int pieceChoose;    //Store the piece choosen by the player
             int pieceActuel[7][7]; //Store the piece in it's actual state
-            while (state != 5){
+            int game_running = 1; //Store if the game is exit or not
+            while (game_running){
                 switch (state)
                 {
                 //Tell the player it's they turn
                 case 0:
-                    printf("C'est au joueur %d de jouer !",player+1);
-                    getchar();
                     printTheBoard(tab);
-                    state = 1;
-                    break;
+                    printf("C'est au joueur %d de jouer !",player+1);
+                    int choiceStartTour = 0;
+                    do{
+                        printf("\n1 - Continuer\n2 - Sauvgarder\n-> ");
+                        scanf("%d",&choiceStartTour);
+                        printf("\n");
+                    }while(choiceStartTour<1 || choiceStartTour>2);
+                    if (choiceStartTour==1){
+                        //Continue
+                        state= 1;
+                        break;
+                    }else{
+                        //Go to save game
+                        state = 6;
+                        break;
+                    }
 
                 //piece selection 
                 case 1:
@@ -267,7 +308,7 @@ int main(int argc, char const *argv[])
                     if(checkWin(playerL[player].inventory)){
                         printf("\nLe joueur %d a gagné !\n",player);
                         //If they win leave the game 
-                        game_running = 0;
+                        program_running = 0;
                     }else{
                         //check state of each player
                         int playerout = 0;
@@ -296,9 +337,26 @@ int main(int argc, char const *argv[])
                     printf("\nFin du jeu\n");
                     game_running = 0;
                     break;
+
+                //Savegame
+                case 6:
+                    printf("\nSauvegarde du jeu\n");
+                    printf("\n>>>Debug - 7\n");
+                    int piecesL [4][21];
+                    for (int i = 0; i < 4; i++){
+                        for (int j = 0; j < 21; j++){
+                            piecesL[i][j] = playerL[i].inventory[j];
+                        }
+                    }
+                    newSave(player,piecesL,tab);
+                    printf("Gamr saved !\n");
+                    game_running = 0;
+                    break;
                 }
             }
         }
+        getchar();
+        program_running = 0;
     }
     return 0;
 }
