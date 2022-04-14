@@ -11,12 +11,14 @@
 
 //Libraries 
 #include<stdio.h>
+#include <stdlib.h>
 
 //Other files
 #include "plateau.c"
 #include "piece.c"
 #include "orientation.c"
 #include "boardXpiece.c"
+#include "interface.c"
 
 //constant
 #define SIZE_PLAT 22
@@ -68,6 +70,18 @@ void printPiece(int piece[7][7]){
     for (int i = 0; i < 7; i++){
         for (int j = 0; j < 7; j++){
             printf("%d ",piece[i][j]);
+
+
+            // if(i==1&&j==1){
+            //     red();
+            // }
+            // if(piece[i][j]==1){
+            //     printf("██-");
+            // }
+            // else{
+            //     printf("XXX");
+            // }
+            // reset();
         }
         printf("\n");
     }
@@ -82,12 +96,32 @@ void printPiece(int piece[7][7]){
 void printTheBoard(int tab[SIZE_PLAT][SIZE_PLAT]){
     printf("\n     0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21\n# --------------------------------------------------------------------\n");
     for (int i = 0; i < SIZE_PLAT; i++){
-        printf(i>9?"%d | ":" %d | ",i);
+        printf(i>9?"%d |":" %d |",i);
         for (int j = 0; j < SIZE_PLAT; j++){
-            printf("%d  ",tab[i][j]);
+            if(tab[i][j]==5){
+                if(i==0 || i==21){
+                    printf("═══");
+                }
+                else{
+                    printf(" ║ ");
+                }
+            }
+            else if (tab[i][j]==1 && (i!=0&&j!=0)){
+                printf("██ ");
+            }
+            else if(tab[i][j]==0){
+                printf("   ");
+            }
+            else{
+                printf(" %d ",tab[i][j]);
+            }
         }
-        printf("\n   |\n");
+        printf("\n");
     }
+}
+
+void fenetre(){
+
 }
 
 
@@ -123,6 +157,8 @@ int main(int argc, char const *argv[])
                 {
                 //Tell the player it's they turn
                 case 0:
+                    system("clear");
+                    fenetre();
                     printf("C'est au joueur %d de jouer !",player+1);
                     getchar();
                     printTheBoard(tab);
@@ -131,7 +167,7 @@ int main(int argc, char const *argv[])
 
                 //piece selection 
                 case 1:
-                    printf("Selection de la piece\n");
+                    printf("\nSelection de la piece\n");
                     do{
                         printf("Choisi une piece a jouer (0-20): ");
                         //get the value
