@@ -79,7 +79,7 @@ void newSave(int playerturn, int piece_restante[4][21], int board[22][22]){
 
     if(fptr == NULL){
         //Log error
-        printf("Error! opening file");            
+        printf("\nError! opening file\n");            
     }else{
         //Print and close the file
         fprintf(fptr,"%s",finalString);

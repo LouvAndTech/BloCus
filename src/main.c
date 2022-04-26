@@ -11,6 +11,7 @@
 
 //Libraries 
 #include<stdio.h>
+#include <stdlib.h>
 
 //Other files
 #include "plateau.c"
@@ -18,6 +19,7 @@
 #include "orientation.c"
 #include "boardXpiece.c"
 #include "saveFile.c"
+#include "interface.c"
 
 //constant
 #define SIZE_PLAT 22
@@ -59,38 +61,6 @@
     }
 //END CLASS
 
-/**
- * @brief  function to print a piece
- * 
- * @param piece //the piece to print
- */
-void printPiece(int piece[7][7]){
-    printf("\n");
-    for (int i = 0; i < 7; i++){
-        for (int j = 0; j < 7; j++){
-            printf("%d ",piece[i][j]);
-        }
-        printf("\n");
-    }
-    getchar();
-}
-
-/**
- * @brief Print the board
- * 
- * @param tab the board to print
- */
-void printTheBoard(int tab[SIZE_PLAT][SIZE_PLAT]){
-    printf("\n     0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21\n# --------------------------------------------------------------------\n");
-    for (int i = 0; i < SIZE_PLAT; i++){
-        printf(i>9?"%d | ":" %d | ",i);
-        for (int j = 0; j < SIZE_PLAT; j++){
-            printf("%d  ",tab[i][j]);
-        }
-        printf("\n   |\n");
-    }
-}
-
 void retrieveSave(int *turn,Player list[4],int tab[SIZE_PLAT][SIZE_PLAT]){
     int lProv[4][21];
     readSave(turn,lProv,tab);
@@ -107,7 +77,7 @@ void retrieveSave(int *turn,Player list[4],int tab[SIZE_PLAT][SIZE_PLAT]){
  * 
  * @param argc 
  * @param argv 
- * @return int 
+ * @return int  
  */
 int main(int argc, char const *argv[])
 {   
@@ -126,6 +96,7 @@ int main(int argc, char const *argv[])
     //Ask the player to start a new game or load from the save
     int ngame = 0;
     do{
+        system("clear");
         printf("\n1 - Nouvelle partie\n2 - Charger une partie\n-> ");
         scanf("%d",&ngame);
         printf("\n");
@@ -147,14 +118,37 @@ int main(int argc, char const *argv[])
                 {
                 //Tell the player it's they turn
                 case 0:
-                    printTheBoard(tab);
-                    printf("C'est au joueur %d de jouer !",player+1);
+                    system("clear");
+                    printf("C'est au ");
+
+                    switch (player+1)
+                    {
+                    case 1:
+                        red();
+                        break;
+                    case 2:
+                        green();
+                        break;
+                    case 3:
+                        yellow();
+                        break;
+                    case 4:
+                        blue();
+                        break;
+                    }
+                    printf("joueur %d ",player+1);
+                    reset();
+                    printf("de jouer !");
+                    getchar();
+                    getchar();
+                    printTheBoard(tab,0);
                     int choiceStartTour = 0;
                     do{
                         printf("\n1 - Continuer\n2 - Sauvgarder\n-> ");
                         scanf("%d",&choiceStartTour);
                         printf("\n");
                     }while(choiceStartTour<1 || choiceStartTour>2);
+                    system("clear");
                     if (choiceStartTour==1){
                         //Continue
                         state= 1;
@@ -164,18 +158,29 @@ int main(int argc, char const *argv[])
                         state = 6;
                         break;
                     }
+                    state = 1;
+                    break;
 
                 //piece selection 
                 case 1:
-                    printf("Selection de la piece\n");
                     do{
+                        printf("\nSelection de la piece\n");
+                        printf("Voir toutes les pièces (21)\n");
                         printf("Choisi une piece a jouer (0-20): ");
                         //get the value
                         scanf("%d",&pieceChoose);
-                        if (playerL[player].inventory[pieceChoose]==0){
-                            printf("Piece non disponible\n");
+                        // printf("\n------%d\n",pieceChoose);
+
+                        if(pieceChoose==21){
+                            printAllPieces();
                         }
+
+                        // if (playerL[player].inventory[pieceChoose]==0){
+                        //     printf(">>> La pièce %d n'est pas disponible\n",pieceChoose);
+                        // }
+
                         //Check if the player still got the piece in inventory
+
                     }while (playerL[player].inventory[pieceChoose]==0 || pieceChoose>20 || pieceChoose<0);
                     //Get the piece from the database
                     returnPiece(pieceActuel,pieceChoose); 
@@ -249,9 +254,10 @@ int main(int argc, char const *argv[])
                     do{
                         switch (localState){
                             case 0: //enter x
-                                do{ 
+                                do{
+                                    system("clear");
                                     pos[0] = -1;
-                                    printTheBoard(tab);
+                                    printTheBoard(tab,0);
                                     printf("\nEntrer une colonne(0 pour revenir): \n-> ");
                                     scanf("%d",&pos[0]);
                                     printf("\n");
@@ -264,12 +270,14 @@ int main(int argc, char const *argv[])
                                 break;
 
                             case 1: //Enter y
+                                system("clear");
                                 do{
                                     pos[1] = -1;
-                                    printTheBoard(tab);
+                                    printTheBoard(tab,pos[0]);
                                     printf("\nEntrer une ligne (0 pour revenir): \n-> ");
                                     scanf("%d",&pos[1]);
                                     printf("\n");
+                                    system("clear");
                                 }while(pos[1]<0 || pos[1]>20);
                                 if(pos[1]){
                                     localState = 2;
@@ -282,8 +290,10 @@ int main(int argc, char const *argv[])
                                 //Check if the place is free
                                 if(checkPos(tab,pieceActuel,pos,player+1)){
                                     placePiece(tab,pieceActuel,pos,player);
-                                    printTheBoard(tab); 
+                                    printTheBoard(tab,0); 
                                     //Switch to the next step
+                                    getchar();
+                                    getchar();
                                     state = 4;
                                 }else{
                                     printf("\nLa piece ne peut pas être placée ici.\n");
@@ -291,7 +301,7 @@ int main(int argc, char const *argv[])
                                 }
                                 break;
                         }
-                    }while(state ==3);
+                    }while(state == 3);
                     break;
 
                 //update the player inventory and pass to the next

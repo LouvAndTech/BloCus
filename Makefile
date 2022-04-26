@@ -1,4 +1,4 @@
-all: GCC
+all: linux
 
 GCC : 
 	@echo "Compile for Linux..."
@@ -17,3 +17,8 @@ TEST:
 	@gcc -o test.out ./test.c
 	@echo "Done"
 	@./test.out
+linux : 
+	@echo "Compile for Linux"
+	@gcc -o main.out ./src/main.c
+	@echo "Done"
+	@./main.out
