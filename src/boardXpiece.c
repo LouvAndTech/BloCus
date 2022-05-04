@@ -24,7 +24,6 @@
  * @return int      1 if possible else 0 
  */
 int checkPos(int board[SIZE_BOARD][SIZE_BOARD], int piece[SIZE_PIECE][SIZE_PIECE],int pos[2],int player){
-    printf("pos %d - %d\n",pos[0],pos[1]);
     //Get the real position on the board
     int posMasquePiece[2] = {pos[0]-1, pos[1]-1};
     int posInTab[2];
@@ -35,38 +34,32 @@ int checkPos(int board[SIZE_BOARD][SIZE_BOARD], int piece[SIZE_PIECE][SIZE_PIECE
 
     //For each case in the piece 
     for (int piece_h = 0; piece_h < SIZE_PIECE && placeOK; piece_h++){
-                printf("piece_v end h:%d\n",piece_h);
                 posInTab[0] = piece_h+posMasquePiece[0];
         for (int piece_v = 0; piece_v < SIZE_PIECE && placeOK; piece_v++){
             //Calculate the pos on the board we're looking for
             posInTab[1] = piece_v+posMasquePiece[1];
-            printf("piece[piece_h][piece_v]=%d | board[posInTab[%d]][posInTab[%d]]= %d \n",piece[piece_h][piece_v],posInTab[0],posInTab[1],board[posInTab[0]][posInTab[1]]);
             switch (piece[piece_h][piece_v]){
                 //Check for collisions
                 case 1:
                     if (board[posInTab[0]][posInTab[1]]!=0){
                         placeOK = 0;
-                        printf("Collision\n");
                     }
                     break;
                 //check for close enought to it's own pieces
                 case 2:
                     if (board[posInTab[0]][posInTab[1]]==player){
                         closeEnougth = 1;
-                        printf("Close enought\n");
                     }
                     break;
                 //check for far enought from it's own pieces
                 case 3:
                     if (board[posInTab[0]][posInTab[1]]==player){
                         placeOK = 0;
-                        printf("Not far enought\n");
                     }
                     break;
             }
         }
     }
-    printf("closeEnougth = %d\n",closeEnougth);
     return((closeEnougth && placeOK)?1:0);
 }
 
