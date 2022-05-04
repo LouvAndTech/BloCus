@@ -71,7 +71,6 @@ void retrieveSave(int *turn,Player list[4],int tab[SIZE_PLAT][SIZE_PLAT]){
     }
 }
 
-
 /**
  * @brief Main
  * 
@@ -93,12 +92,17 @@ int main(int argc, char const *argv[])
     //start with the player 1:
     int player = 0;
 
+    //Store if the input is correct or not
+    int goodInput = 0;
+    
     //Ask the player to start a new game or load from the save
     int ngame = 0;
     do{
         system("clear");
         printf("\n1 - Nouvelle partie\n2 - Charger une partie\n-> ");
-        scanf("%d",&ngame);
+        goodInput = scanf("%d",&ngame);
+        fflush(stdin);
+        ngame = (goodInput)?ngame:0;
         printf("\n");
     }while(ngame<1 || ngame>2);
     if (ngame==2){
@@ -113,6 +117,7 @@ int main(int argc, char const *argv[])
             int pieceChoose;    //Store the piece choosen by the player
             int pieceActuel[7][7]; //Store the piece in it's actual state
             int game_running = 1; //Store if the game is exit or not
+
             while (game_running){
                 switch (state)
                 {
@@ -145,7 +150,9 @@ int main(int argc, char const *argv[])
                     int choiceStartTour = 0;
                     do{
                         printf("\n1 - Continuer\n2 - Sauvgarder\n-> ");
-                        scanf("%d",&choiceStartTour);
+                        goodInput = scanf("%d",&choiceStartTour);
+                        fflush(stdin);
+                        choiceStartTour = (goodInput)?choiceStartTour:0;
                         printf("\n");
                     }while(choiceStartTour<1 || choiceStartTour>2);
                     system("clear");
@@ -168,7 +175,9 @@ int main(int argc, char const *argv[])
                         printf("Voir toutes les pièces (21)\n");
                         printf("Choisi une piece a jouer (0-20): ");
                         //get the value
-                        scanf("%d",&pieceChoose);
+                        goodInput = scanf("%d",&pieceChoose);
+                        fflush(stdin);
+                        pieceChoose = (goodInput)?pieceChoose:-1;
                         // printf("\n------%d\n",pieceChoose);
 
                         if(pieceChoose==21){
@@ -199,13 +208,16 @@ int main(int argc, char const *argv[])
                     int choice = 0;
                     int changedPiece[7][7]; //Piece to store the change 
                     initZero(changedPiece);
+                    
                     do{
                         switch(choice){
                             //Ask while the answer isn't correct
                             case 0:
                                 do{
                                     printf("\n1 - miroir\n2 - droite\n3 - gauche\n4 - valider\n5 - retour\n-> ");
-                                    scanf("%d",&choice);
+                                    goodInput = scanf("%d",&choice);
+                                    goodInput = (goodInput)?choice:0;
+                                    fflush(stdin);
                                     printf("\n");
                                 }while(choice<1 || choice>5);
                                 break;
@@ -259,7 +271,9 @@ int main(int argc, char const *argv[])
                                     pos[1] = -1;
                                     printTheBoard(tab,0);
                                     printf("\nEntrer une colonne (0 pour revenir): \n-> ");
-                                    scanf("%d",&pos[1]);
+                                    goodInput = scanf("%d",&pos[1]);
+                                    fflush(stdin);
+                                    pos[1] = (goodInput)?pos[1]:0;
                                     printf("\n");
                                 }while(pos[1]<0 || pos[1]>20);
                                 if(pos[1]){
@@ -275,7 +289,9 @@ int main(int argc, char const *argv[])
                                     pos[0] = -1;
                                     printTheBoard(tab,pos[1]);
                                     printf("\nEntrer une ligne (0 pour revenir): \n-> ");
-                                    scanf("%d",&pos[0]);
+                                    goodInput = scanf("%d",&pos[0]);
+                                    fflush(stdin);
+                                    pos[0] = (goodInput)?pos[0]:0;
                                     printf("\n");
                                     system("clear");
                                 }while(pos[0]<0 || pos[0]>20);
