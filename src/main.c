@@ -256,13 +256,13 @@ int main(int argc, char const *argv[])
                             case 0: //enter x
                                 do{
                                     system("clear");
-                                    pos[0] = -1;
+                                    pos[1] = -1;
                                     printTheBoard(tab,0);
-                                    printf("\nEntrer une colonne(0 pour revenir): \n-> ");
-                                    scanf("%d",&pos[0]);
+                                    printf("\nEntrer une colonne (0 pour revenir): \n-> ");
+                                    scanf("%d",&pos[1]);
                                     printf("\n");
-                                }while(pos[0]<0 || pos[0]>20);
-                                if(pos[0]){
+                                }while(pos[1]<0 || pos[1]>20);
+                                if(pos[1]){
                                     localState = 1;
                                 }else{
                                     state = 2;
@@ -272,14 +272,14 @@ int main(int argc, char const *argv[])
                             case 1: //Enter y
                                 system("clear");
                                 do{
-                                    pos[1] = -1;
-                                    printTheBoard(tab,pos[0]);
+                                    pos[0] = -1;
+                                    printTheBoard(tab,pos[1]);
                                     printf("\nEntrer une ligne (0 pour revenir): \n-> ");
-                                    scanf("%d",&pos[1]);
+                                    scanf("%d",&pos[0]);
                                     printf("\n");
                                     system("clear");
-                                }while(pos[1]<0 || pos[1]>20);
-                                if(pos[1]){
+                                }while(pos[0]<0 || pos[0]>20);
+                                if(pos[0]){
                                     localState = 2;
                                 }else{
                                     localState = 0;

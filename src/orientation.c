@@ -93,6 +93,7 @@ void copy(int origin[7][7],int new[7][7]){
  * @param origin    Inout
  * @param new       Output
  */
+//NEED TO SORT FROM THE BOTTOM LEFT TO THE UP RIGHT
 void rotateRigth(int origin[7][7],int new[7][7]){
     int iMax = imax(origin);
     int jMax = jmax(origin);
