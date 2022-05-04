@@ -60,5 +60,6 @@ makefile
 
 #test file
 test.c
+test/*
 #SaveFile
 save.txt
