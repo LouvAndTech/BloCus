@@ -95,15 +95,26 @@ void copy(int origin[7][7],int new[7][7]){
  */
 //NEED TO SORT FROM THE BOTTOM LEFT TO THE UP RIGHT
 void rotateRigth(int origin[7][7],int new[7][7]){
+    //print the piece
+    for (int i = 0; i < 7; i++){
+        for (int j = 0; j < 7; j++){
+            printf("%d ",origin[i][j]);
+        }
+        printf("\n");
+    }
     int iMax = imax(origin);
     int jMax = jmax(origin);
     for (int i = 0; i < 7; i++){
         for (int j = 0; j < 7; j++){
             if (iMax == jMax){
-                new[i][j] = origin[imax(origin)-j][i];
+                if (origin[imax(origin)-j][i]){
+                    new[i][j] = origin[imax(origin)-j][i];
+                }else{
+                    new[i][j] = 0;
+                }
             }else {
                 if(iMax>=j && jMax >=i){
-                new[i][j] = origin[iMax-j][jMax-i];
+                new[i][j] = origin[iMax-j][i];
                 }else{
                     new[i][j] = 0;
                 }
