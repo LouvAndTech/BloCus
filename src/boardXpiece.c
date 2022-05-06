@@ -9,8 +9,6 @@
  * 
  */
 
-#include"boardXpiece.h"
-
 #define SIZE_BOARD 22
 #define SIZE_PIECE 7
 

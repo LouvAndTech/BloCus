@@ -9,10 +9,6 @@
  * 
  */
 
-//Include header
-#include "plateau.h"
-
-
 /**
  * @brief plateau
  * 

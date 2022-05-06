@@ -59,7 +59,6 @@ void printPiece(int piece[7][7]){
         }
         printf("\n");
     }
-    getchar();
 }
 
 void printAllPieces(){
